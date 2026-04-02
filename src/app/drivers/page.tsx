@@ -34,12 +34,14 @@ export default async function DriversPage() {
         </div>
       </PageWrapper>
     );
-  } catch {
+  } catch (e) {
+    const message = e instanceof Error ? e.message : "Unknown error";
     return (
       <PageWrapper>
         <div className="max-w-7xl mx-auto px-6 py-10">
           <div className="glass-card p-8 text-center" style={{ borderColor: "rgba(239,68,68,0.3)" }}>
             <p className="text-text-secondary">Failed to load driver DNA. Please try again.</p>
+            <p className="text-text-muted text-xs mt-3 break-words">{message}</p>
           </div>
         </div>
       </PageWrapper>
