@@ -118,13 +118,9 @@ function deriveFormDelta(
   };
 }
 
-function deriveFormTrend(driverId: string, allRaces: ErgastRace[]): FormTrend {
-  const results = allRaces
-    .flatMap((r) => (r.Results ?? []).map((res) => ({ pos: parseInt(res.position) || 20, round: parseInt(r.round) })))
-    .filter((_, i, arr) => arr.some((x) => x.round === allRaces[i]?.round ? false : true))
-    .sort((a, b) => b.round - a.round);
-
-  // Simple: just use standing entries
+function deriveFormTrend(_driverId: string, _allRaces: ErgastRace[]): FormTrend {
+  // Simple trend model for now (intentionally constant). Keeping this as a
+  // separate function means we can improve it later without touching callers.
   return "stable";
 }
 
