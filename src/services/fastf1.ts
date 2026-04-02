@@ -1,6 +1,9 @@
 import type { SectorDataPoint, BattleScore } from "@/types";
 
-const API = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
+// Vercel may provide `NEXT_PUBLIC_API_URL=""` (empty string). `??` does not treat
+// empty string as missing, so we explicitly handle it here.
+const API_FROM_ENV = (process.env.NEXT_PUBLIC_API_URL ?? "").trim();
+const API = API_FROM_ENV.length > 0 ? API_FROM_ENV : "http://localhost:8000";
 
 class APIError extends Error {
   status: number;

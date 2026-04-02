@@ -19,29 +19,41 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export const revalidate = 3600;
 
 export default async function DriverDetailPage({ params }: Props) {
-  const [standingsData, allRaces] = await Promise.all([
-    getDriverStandings(),
-    getAllRaceResults(),
-  ]);
-  const drivers = mapDrivers(standingsData, allRaces);
-  const driver = drivers.find((d) => d.id === params.driverId);
+  try {
+    const [standingsData, allRaces] = await Promise.all([
+      getDriverStandings(),
+      getAllRaceResults(),
+    ]);
+    const drivers = mapDrivers(standingsData, allRaces);
+    const driver = drivers.find((d) => d.id === params.driverId);
 
-  if (!driver) notFound();
+    if (!driver) notFound();
 
-  const teamColor = TEAM_COLORS[driver.teamId];
+    const teamColor = TEAM_COLORS[driver.teamId];
 
-  return (
-    <PageWrapper>
-      {/* Team color aura on background */}
-      <div
-        className="fixed inset-0 z-0 pointer-events-none"
-        style={{
-          background: `radial-gradient(ellipse at 50% 0%, ${teamColor}0D 0%, transparent 60%)`,
-        }}
-      />
-      <div className="max-w-3xl mx-auto px-6 py-10 relative z-10">
-        <DriverDNACard driver={driver} />
-      </div>
-    </PageWrapper>
-  );
+    return (
+      <PageWrapper>
+        {/* Team color aura on background */}
+        <div
+          className="fixed inset-0 z-0 pointer-events-none"
+          style={{
+            background: `radial-gradient(ellipse at 50% 0%, ${teamColor}0D 0%, transparent 60%)`,
+          }}
+        />
+        <div className="max-w-3xl mx-auto px-6 py-10 relative z-10">
+          <DriverDNACard driver={driver} />
+        </div>
+      </PageWrapper>
+    );
+  } catch {
+    return (
+      <PageWrapper>
+        <div className="max-w-3xl mx-auto px-6 py-10">
+          <div className="glass-card p-8 text-center" style={{ borderColor: "rgba(239,68,68,0.3)" }}>
+            <p className="text-text-secondary">Failed to load driver data. Please try again.</p>
+          </div>
+        </div>
+      </PageWrapper>
+    );
+  }
 }
