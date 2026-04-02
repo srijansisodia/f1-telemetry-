@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx create-next-app@14 . --typescript --tailwind --app --src-dir --import-alias \"@/*\" --yes)",
+      "Read(//usr/local/**)",
+      "Read(//c/Users/srijan.sisodia/.nvm/versions/**)",
+      "Bash(echo \"checking PATH: $PATH\")",
+      "Read(//c/Program Files/**)",
+      "Read(//c/Program Files \\(x86\\)/**)",
+      "Read(//c/Users/srijan.sisodia/AppData/Roaming/**)",
+      "Bash(cmd.exe /c \"where node 2>&1 & where npm 2>&1 & where npx 2>&1\")",
+      "Bash(cmd.exe /c \"where node\")",
+      "Bash(cmd.exe /c \"where npm\")",
+      "Bash(cmd.exe /c \"node --version\")",
+      "Bash(cmd.exe /c \"node --version && npm --version && npx --version\")",
+      "Bash(powershell.exe -Command \"node --version; npm --version\")",
+      "Read(//c/Users/srijan.sisodia/**)",
+      "Read(//c/Users/srijan.sisodia/AppData/**)",
+      "Bash(find /c/Users/srijan.sisodia/AppData/Local/claude-cli-nodejs -name node*)",
+      "Bash(pip --version)",
+      "Bash(pip3 --version)",
+      "Bash(export PATH=\"/c/Users/srijan.sisodia/AppData/Local/Programs/Python/Python313:/c/Users/srijan.sisodia/AppData/Local/Programs/Python/Python313/Scripts:$PATH\")",
+      "Bash(winget --version)",
+      "Bash(winget install:*)"
+    ]
+  }
+}
