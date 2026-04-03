@@ -4,18 +4,22 @@ import SectionHeader from "@/components/layout/SectionHeader";
 import DriverSelector from "@/components/battle/DriverSelector";
 import BattleLayout from "@/components/battle/BattleLayout";
 import CopyLinkButton from "@/components/ui/CopyLinkButton";
+import SeasonPicker from "@/components/ui/SeasonPicker";
 import { getDriverStandings, getAllRaceResults } from "@/services/ergast";
 import { mapDrivers } from "@/services/transform";
+import { CURRENT_SEASON } from "@/lib/constants";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = { title: "Teammate Battle" };
 export const revalidate = 3600;
 
-export default async function BattlePage() {
+export default async function BattlePage({ searchParams }: { searchParams: Promise<{ season?: string }> }) {
+  const { season: seasonParam } = await searchParams;
+  const season = Number(seasonParam ?? CURRENT_SEASON);
   try {
     const [standingsData, allRaces] = await Promise.all([
-      getDriverStandings(),
-      getAllRaceResults(),
+      getDriverStandings(season),
+      getAllRaceResults(season),
     ]);
     const drivers = mapDrivers(standingsData, allRaces);
     const driverMap = Object.fromEntries(drivers.map((d) => [d.id, d]));
@@ -25,9 +29,14 @@ export default async function BattlePage() {
         <div className="max-w-4xl mx-auto px-6 py-10">
           <SectionHeader
             title="Teammate Battle"
-            subtitle="Head-to-head performance breakdown"
+            subtitle={`Head-to-head performance breakdown — ${season}`}
             accent="purple"
-            right={<CopyLinkButton />}
+            right={
+              <div className="flex items-center gap-3">
+                <Suspense><SeasonPicker /></Suspense>
+                <CopyLinkButton />
+              </div>
+            }
           />
 
           {/* Pair selector */}

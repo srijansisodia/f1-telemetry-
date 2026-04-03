@@ -1,9 +1,12 @@
+import { Suspense } from "react";
 import PageWrapper from "@/components/layout/PageWrapper";
 import SectionHeader from "@/components/layout/SectionHeader";
 import StandingsTable from "@/components/standings/StandingsTable";
+import SeasonPicker from "@/components/ui/SeasonPicker";
 import { getDriverStandings, getConstructorStandings, getAllRaceResults } from "@/services/ergast";
 import { mapDrivers, mapStandings, mapConstructorStandings } from "@/services/transform";
 import { TEAM_COLORS } from "@/lib/teamColors";
+import { CURRENT_SEASON } from "@/lib/constants";
 import type { ConstructorStanding } from "@/types";
 import type { Metadata } from "next";
 
@@ -66,12 +69,14 @@ function ConstructorRow({ s, index, max }: { s: ConstructorStanding; index: numb
   );
 }
 
-export default async function StandingsPage() {
+export default async function StandingsPage({ searchParams }: { searchParams: Promise<{ season?: string }> }) {
+  const { season: seasonParam } = await searchParams;
+  const season = Number(seasonParam ?? CURRENT_SEASON);
   try {
     const [standingsData, constructorData, allRaces] = await Promise.all([
-      getDriverStandings(),
-      getConstructorStandings(),
-      getAllRaceResults(),
+      getDriverStandings(season),
+      getConstructorStandings(season),
+      getAllRaceResults(season),
     ]);
 
     const drivers = mapDrivers(standingsData, allRaces);
@@ -82,12 +87,18 @@ export default async function StandingsPage() {
     return (
       <PageWrapper>
         <div className="max-w-7xl mx-auto px-6 py-10">
+          <div className="flex items-center justify-between mb-8">
+            <h1 className="font-heading text-xl text-text-primary tracking-wider">Standings</h1>
+            <Suspense>
+              <SeasonPicker />
+            </Suspense>
+          </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
             {/* Driver Standings */}
             <div>
               <SectionHeader
                 title="Drivers"
-                subtitle="2024 World Championship"
+                subtitle={`${season} World Championship`}
                 accent="purple"
               />
               <StandingsTable standings={standings} drivers={drivers} />
@@ -97,7 +108,7 @@ export default async function StandingsPage() {
             <div>
               <SectionHeader
                 title="Constructors"
-                subtitle="2024 World Championship"
+                subtitle={`${season} World Championship`}
                 accent="cyan"
               />
               <div className="space-y-2">
