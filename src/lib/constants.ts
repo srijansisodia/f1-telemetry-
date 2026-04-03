@@ -5,7 +5,7 @@ export const NAV_LINKS = [
   { href: "/sectors", label: "Sectors" },
 ] as const;
 
-export const CURRENT_SEASON = 2024;
+export const CURRENT_SEASON = 2025;
 
 export const TEAMMATE_PAIRS: [string, string][] = [
   ["VER", "PER"],

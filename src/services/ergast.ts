@@ -1,11 +1,10 @@
 import { CURRENT_SEASON } from "@/lib/constants";
 
-const BASE = "https://ergast.com/api/f1";
+const BASE = "https://api.jolpi.ca/ergast/f1";
 
 async function ergastFetch<T>(path: string): Promise<T> {
-  const res = await fetch(`${BASE}${path}`, {
-    next: { revalidate: 3600 },
-  });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const res = await fetch(`${BASE}${path}`, { next: { revalidate: 3600 } } as any);
   if (!res.ok) throw new Error(`Ergast API error: ${res.status} ${path}`);
   return res.json() as Promise<T>;
 }
